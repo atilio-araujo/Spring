@@ -1,5 +1,6 @@
 package br.com.alaraujo.musicdashboard.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,17 @@ public class SpotifyService {
 
 	public List<SpotifyArtist> getArtistByName(String artistName) throws Exception{
 
+		List<SpotifyArtist> artistList = new ArrayList<SpotifyArtist>();
 		ResponseEntity<SpotifyArtistSearchResponse> response = restTemplate.getForEntity(
 		        SpotifyAPILink.SEARCH.getUri() + artistName + "&type=artist",
 		        SpotifyArtistSearchResponse.class);
-		
-		return response.getBody().getArtists().getItems();
+
+		if ( response != null && response.getBody() != null 
+				&& response.getBody().getArtists() != null && response.getBody().getArtists().getItems() != null){
+			artistList = response.getBody().getArtists().getItems();
+		}
+
+		return artistList;
 	}
 
 //	public List<SimpleAlbum> getAlbumListByArtist(String artistID) throws IOException, WebApiException {

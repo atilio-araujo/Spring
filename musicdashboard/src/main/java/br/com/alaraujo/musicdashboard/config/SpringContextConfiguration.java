@@ -1,5 +1,6 @@
 package br.com.alaraujo.musicdashboard.config;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -24,14 +25,20 @@ public class SpringContextConfiguration {
 
     	HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 
-    	if (proxyProvider.isProxyEnaled()) {			
-    		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-    		credsProvider.setCredentials( 
-    				new AuthScope(proxyProvider.getProxyHost(), proxyProvider.getProxyPort()), 
-    				new UsernamePasswordCredentials(proxyProvider.getProxyUser(), proxyProvider.getProxyPassword()));
-    		
+    	if ( proxyProvider.isProxyEnaled() ) {
     		HttpHost myProxy = new HttpHost(proxyProvider.getProxyHost(), proxyProvider.getProxyPort());
-    		clientBuilder.setProxy(myProxy).setDefaultCredentialsProvider(credsProvider).disableCookieManagement();
+
+    		if ( StringUtils.isNotBlank(proxyProvider.getProxyUser()) && StringUtils.isNotBlank(proxyProvider.getProxyPassword()) ) {				
+    			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+    			credsProvider.setCredentials( 
+    					new AuthScope(proxyProvider.getProxyHost(), proxyProvider.getProxyPort()), 
+    					new UsernamePasswordCredentials(proxyProvider.getProxyUser(), proxyProvider.getProxyPassword()));
+    			
+    			clientBuilder.setProxy(myProxy).setDefaultCredentialsProvider(credsProvider).disableCookieManagement();
+			} else {
+				clientBuilder.setProxy(myProxy).disableCookieManagement();
+			}
+
 		} else {
 			clientBuilder.disableCookieManagement();
 		}

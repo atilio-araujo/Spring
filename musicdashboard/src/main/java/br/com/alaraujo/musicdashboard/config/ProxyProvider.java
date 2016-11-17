@@ -1,5 +1,6 @@
 package br.com.alaraujo.musicdashboard.config;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
@@ -32,8 +33,10 @@ public class ProxyProvider {
 			proxyUser = System.getProperty("http.proxyUser");
 			proxyPassword = System.getProperty("http.proxyPassword");
 
-			credentialProvider = new BasicCredentialsProvider();
-			credentialProvider.setCredentials(new AuthScope(proxyHost, proxyPort, AuthScope.ANY_HOST, "ntlm"), new NTCredentials(proxyUser, proxyPassword, "", ""));
+			if ( StringUtils.isNotBlank(proxyUser) && StringUtils.isNotBlank(proxyPassword) ){				
+				credentialProvider = new BasicCredentialsProvider();
+				credentialProvider.setCredentials(new AuthScope(proxyHost, proxyPort, AuthScope.ANY_HOST, "ntlm"), new NTCredentials(proxyUser, proxyPassword, "", ""));
+			}
 		}
 	}
 
