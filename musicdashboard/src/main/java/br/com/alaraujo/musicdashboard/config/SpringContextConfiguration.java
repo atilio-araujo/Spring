@@ -1,11 +1,8 @@
 package br.com.alaraujo.musicdashboard.config;
 
-<<<<<<< HEAD:src/main/java/br/com/alaraujo/musicdashboard/config/SpringContextConfiguration.java
 import java.util.ArrayList;
 import java.util.List;
 
-=======
->>>>>>> 329e4109169b921296a622244cf980108965f7ed:musicdashboard/src/main/java/br/com/alaraujo/musicdashboard/config/SpringContextConfiguration.java
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -31,17 +28,6 @@ public class SpringContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private ProxyProvider proxyProvider;
-
-//	@Bean
-//	public InternalResourceViewResolver internalResourceViewResolver() {
-//		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//		resolver.setPrefix("/WEB-INF/jsp/");
-//		resolver.setSuffix(".jsp");
-//		
-//		resolver.setExposedContextBeanNames("artistSearchResult");
-//		
-//		return resolver;
-//	}
 
 	@Bean
     protected RestTemplate restTemplate() throws Exception {

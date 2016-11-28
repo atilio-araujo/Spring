@@ -35,8 +35,6 @@ public class SpotifyService {
 		        SpotifyAPILink.SEARCH.getUri() + artistName + "&type=artist",
 		        SpotifyArtistSearchResponse.class);
 
-<<<<<<< HEAD:src/main/java/br/com/alaraujo/musicdashboard/service/SpotifyService.java
-		List<SpotifyArtist> artistList = new ArrayList<SpotifyArtist>();
 		if ( response != null && response.getBody() != null 
 				&& response.getBody().getArtists() != null && response.getBody().getArtists().getItems() != null){
 			artistList  = response.getBody().getArtists().getItems();
@@ -149,14 +147,6 @@ public class SpotifyService {
 		}
 
 		return albumList;
-=======
-		if ( response != null && response.getBody() != null 
-				&& response.getBody().getArtists() != null && response.getBody().getArtists().getItems() != null){
-			artistList = response.getBody().getArtists().getItems();
-		}
-
-		return artistList;
->>>>>>> 329e4109169b921296a622244cf980108965f7ed:musicdashboard/src/main/java/br/com/alaraujo/musicdashboard/service/SpotifyService.java
 	}
 
 }

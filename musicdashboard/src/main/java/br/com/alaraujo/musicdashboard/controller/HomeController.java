@@ -26,7 +26,6 @@ public class HomeController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView home(){
-<<<<<<< HEAD:src/main/java/br/com/alaraujo/musicdashboard/controller/HomeController.java
 		ModelAndView view = new ModelAndView("artistSearchResult");
 		view.addObject("artistList", this.artistSearchResult);
 		return view;
@@ -39,17 +38,7 @@ public class HomeController {
 		this.artistSearchResult.addAll(artistService.getArtistByName(artistName));
 
 		modelAndView.addObject("artistList", this.artistSearchResult);
-=======
 		return new ModelAndView("home");
 	}
 
-	@RequestMapping(value = "/findArtist/{artistName}", method = RequestMethod.GET)
-	public ModelAndView findArtist(@RequestParam("artistName") String artistName) throws Exception{	
-		ModelAndView modelAndView = new ModelAndView("home");
-		List<SpotifyArtist> artistList = artistService.getArtistByName(artistName);
-
-		modelAndView.addObject("artistList", artistList);
->>>>>>> 329e4109169b921296a622244cf980108965f7ed:musicdashboard/src/main/java/br/com/alaraujo/musicdashboard/controller/HomeController.java
-		return modelAndView;
-	}
 }
