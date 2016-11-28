@@ -38,7 +38,8 @@ public class HomeController {
 		this.artistSearchResult.addAll(artistService.getArtistByName(artistName));
 
 		modelAndView.addObject("artistList", this.artistSearchResult);
-		return new ModelAndView("home");
+
+		return modelAndView;
 	}
 
 }
