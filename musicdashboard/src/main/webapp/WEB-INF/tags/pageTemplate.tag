@@ -28,7 +28,7 @@
 <body>
 	<!-- START PAGE CONTAINER -->
 	<div class="page-container">
-		<input type="hidden" id="contextPath" value="${pageContext.request.contextPath}/../resources/">
+		<input type="hidden" id="contextPath" value="${pageContext.request.contextPath}/resources/">
 
 		<!-- START PAGE SIDEBAR -->
 		<div class="page-sidebar">
@@ -184,6 +184,7 @@
 								<span class="label label-danger">4 new</span>
 							</div>
 						</div>
+						<!-- 
 						<div class="panel-body list-group list-group-contacts scroll"
 							style="height: 200px;">
 							<a href="#" class="list-group-item">
@@ -210,6 +211,7 @@
 								<p>I want my money back!</p>
 							</a>
 						</div>
+						 -->
 						<div class="panel-footer text-center">
 							<a href="pages-messages.html">Show all messages</a>
 						</div>
@@ -270,7 +272,17 @@
 			</ul>
 			<!-- END X-NAVIGATION VERTICAL -->
 
-			<main> <jsp:doBody /> </main>
+			<!-- ERROR MESSAGE -->
+			<c:if test="${not empty errorMessage}">
+				<div class="alert alert-danger" role="alert">
+				    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				    <strong>${errorMessage}</strong>
+				</div>
+			</c:if>
+
+			<main> 
+				<jsp:doBody />
+			</main>
 
 	<!-- START SCRIPTS -->
         <!-- START PLUGINS -->

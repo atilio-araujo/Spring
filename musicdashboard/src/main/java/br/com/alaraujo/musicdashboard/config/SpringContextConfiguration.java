@@ -20,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyArtist;
 
 @Configuration
@@ -64,4 +66,10 @@ public class SpringContextConfiguration extends WebMvcConfigurerAdapter {
 	public List<SpotifyArtist> artistSearchResult(){
 		return new ArrayList<SpotifyArtist>();
 	}
+
+	@Bean
+	public ObjectMapper jsonMapper(){
+		return new ObjectMapper();
+	}
+
 }
