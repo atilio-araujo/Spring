@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -34,7 +35,6 @@ import br.com.alaraujo.musicdashboard.model.spotify.SpotifyArtist;
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyArtistSearchResponse;
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyAuthorizationResponse;
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyPage;
-import br.com.alaraujo.musicdashboard.model.spotify.SpotifySimpleArtist;
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyTopTracksResponse;
 import br.com.alaraujo.musicdashboard.model.spotify.SpotifyTrack;
 
@@ -120,7 +120,7 @@ public class SpotifyService {
 
 		try{
 
-			ResponseEntity<SpotifyTopTracksResponse> response = restTemplate.exchange(SpotifyAPILink.ARTISTS.getUri() + artistID + "/top-tracks?country=US",
+			ResponseEntity<SpotifyTopTracksResponse> response = restTemplate.exchange(SpotifyAPILink.ARTISTS.getUri() + artistID + "/top-tracks?country=BR",
 					HttpMethod.GET,
 					this.createAuthenticatedHeader(),
 					SpotifyTopTracksResponse.class);
@@ -150,46 +150,40 @@ public class SpotifyService {
 		List<SpotifyTrack> topTracks = this.getTopTracksByArtistID(artistID);
 		List<SpotifyAlbum> albums = this.getAlbumListByArtist(artistID);
 
-		for( SpotifyAlbum album : albums ){
-			if ( album.getAlbumType().equals(SpotifyAlbumType.ALBUM.getValue()) ){
-				for ( SpotifySimpleArtist simpleArtist : album.getArtists() ){
-					if ( simpleArtist.getId().equals(artistID) ){
-						artistProfile.getAlbums().add(album);
-						break;
-					}
-				}
-			} else if( album.getAlbumType().equals(SpotifyAlbumType.SINGLE.getValue()) ){
-				for ( SpotifySimpleArtist simpleArtist : album.getArtists() ){
-					if ( simpleArtist.getId().equals(artistID) ){						
-						artistProfile.getSingles().add(album);
-						break;
-					}
-				}
-			} else if( album.getAlbumType().equals(SpotifyAlbumType.APPEARS_ON.getValue()) ){
-				for ( SpotifySimpleArtist simpleArtist : album.getArtists() ){
-					if ( simpleArtist.getId().equals(artistID) ){						
-						artistProfile.getAppearsOn().add(album);
-						break;
-					}
-				}
-			} else if( album.getAlbumType().equals(SpotifyAlbumType.COMPILATION.getValue()) ){
-				for ( SpotifySimpleArtist simpleArtist : album.getArtists() ){
-					if ( simpleArtist.getId().equals(artistID) ){						
-						artistProfile.getCompilations().add(album);
-						break;
-					}
-				}
-			}
-		}
+		artistProfile.getAlbums().addAll(
+				albums.stream()
+				.filter(ab -> ab.getAlbumType().equals(SpotifyAlbumType.ALBUM.getValue()))
+				.filter(ab -> ab.getArtists().stream()
+						.filter(sp -> sp.getId().equals(artistID)).count() > 0)
+				.collect(Collectors.toList()));
 
-		for ( SpotifyTrack track : topTracks ){
-			for ( SpotifySimpleArtist simpleArtist : track.getAlbum().getArtists() ){
-				if ( simpleArtist.getId().equals(artistID) ){
-					artistProfile.getTopTracks().add(track);
-					break;
-				}
-			}
-		}
+		artistProfile.getSingles().addAll(
+				albums.stream()
+				.filter(ab -> ab.getAlbumType().equals(SpotifyAlbumType.SINGLE.getValue()))
+				.filter(ab -> ab.getArtists().stream()
+						.filter(sp -> sp.getId().equals(artistID)).count() > 0)
+				.collect(Collectors.toList()));
+
+		artistProfile.getAppearsOn().addAll(
+				albums.stream()
+				.filter(ab -> ab.getAlbumType().equals(SpotifyAlbumType.APPEARS_ON.getValue()))
+				.filter(ab -> ab.getArtists().stream()
+						.filter(sp -> sp.getId().equals(artistID)).count() > 0)
+				.collect(Collectors.toList()));
+
+		artistProfile.getCompilations().addAll(
+				albums.stream()
+				.filter(ab -> ab.getAlbumType().equals(SpotifyAlbumType.COMPILATION.getValue()))
+				.filter(ab -> ab.getArtists().stream()
+						.filter(sp -> sp.getId().equals(artistID)).count() > 0)
+				.collect(Collectors.toList()));
+
+		artistProfile.getTopTracks().addAll(
+				topTracks.stream()
+				.filter(track -> track.getAlbum().getArtists().stream()
+						.filter(sp -> sp.getId().equals(artistID)).count() > 0)
+				.collect(Collectors.toList())
+				);
 
 		artistProfile.setArtist(artist);
 
